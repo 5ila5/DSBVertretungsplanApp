@@ -20,7 +20,10 @@ def getWholeTable(*args):
         conf=json.loads(datei.read())
     dsb = pydsb.PyDSB(conf["benutzer"],conf["passwort"])
     klassen = conf["klassen"].split(",")
-    timetables=dsb.get_plans()
+    try:
+        timetables=dsb.get_plans()
+    except:
+        return
     tabInfos = []
     toCompare = []
 
@@ -42,7 +45,9 @@ def getWholeTable(*args):
 
         #print(table)
         with urllib.request.urlopen(table["url"],cafile=certifi.where()) as f:
-            timetabledata = f.read()  # .decode('utf-8')
+            print("type(f)")
+            print(type(f))
+            timetabledata = str(f.read().decode("latin1").encode('utf8').decode("utf-8")) # .decode('utf-8')
 
         soup = BeautifulSoup(timetabledata, 'html.parser')
         tableInfoTag = soup.find('div', attrs={'class': 'mon_title'})
@@ -141,7 +146,10 @@ def getContent(total=False,*args):
         conf=json.loads(datei.read())
     dsb = pydsb.PyDSB(conf["benutzer"],conf["passwort"])
     klassen = conf["klassen"].split(",")
-    timetables=dsb.get_plans()
+    try:
+        timetables=dsb.get_plans()
+    except:
+        return
     #print(timetables)
     tabInfos = []
     toCompare = []
@@ -166,7 +174,10 @@ def getContent(total=False,*args):
         print("table")
         print(table)
         with urllib.request.urlopen(table["url"],cafile=certifi.where()) as f:
-            timetabledata = str(f.read())  # .decode('utf-8')
+            #f = f.decode('utf-8')
+            timetabledata = str(f.read().decode("latin1").encode('utf8').decode("utf-8")) #.encode('utf8'))
+            with open("test.txt","w",encoding="utf-8") as test:
+                test.write(timetabledata)
 
 
 

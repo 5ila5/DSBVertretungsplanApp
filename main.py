@@ -13,6 +13,7 @@ from kivy.properties import DictProperty
 from kivy.properties import ListProperty
 from kivy.uix.label import Label
 from kivy.uix.popup import Popup
+from kivy.utils import escape_markup
 from kivy.uix.recycleview.datamodel import RecycleDataModelBehavior
 from kivy.core.window import Window
 from kivy.lang import Builder
@@ -297,7 +298,15 @@ class Table (Screen):
 
                     #else:
                     #    self.data_items.append({'text': td.text, 'background_color': (0.992156862745098, 0.925490196078431, 0.850980392156863, 1)})
-                    label = TableLable(text=td.text)
+                    #td.replace("<s>","[s]").replace("</s>","[/s]")
+                    try:
+                        td.s.insert(0,"[s]")
+                        td.s.insert(2,"[/s]")
+                    except Exception as e:
+                        print(str(e))
+                        pass
+
+                    label = TableLable(text=td.text,markup=True)#.text)
                     #label = TableLable(text=td.text,color=[0,0,0,1])
                     #if anzTr %2 == 1:
                         #label.firstColor = False

@@ -13,7 +13,8 @@ package.domain = org.silas
 source.dir = .
 
 # (list) Source files to include (let empty to include all the files)
-source.include_exts = py,png,jpg,kv,atlas,json,html,kv,txt
+source.include_exts = py,png,jpg,kv,atlas,kv #,txt,json
+
 
 # (list) List of inclusions using pattern matching
 #source.include_patterns = assets/*,images/*.png
@@ -28,7 +29,7 @@ source.include_exts = py,png,jpg,kv,atlas,json,html,kv,txt
 #source.exclude_patterns = license,images/*/*.jpg
 
 # (str) Application versioning (method 1)
-version = 0.1
+version = 0.1.2
 
 # (str) Application versioning (method 2)
 # version.regex = __version__ = ['"](.*)['"]

@@ -145,7 +145,8 @@ def getContent(total=False,*args):
     with open(configPath,"r" , encoding="utf-8") as datei:
         conf=json.loads(datei.read())
     dsb = pydsb.PyDSB(conf["benutzer"],conf["passwort"])
-    klassen = conf["klassen"].split(",")
+    klassen = conf["klassen"].replace(" ","").split(",")
+    print(klassen)
     try:
         timetables=dsb.get_plans()
     except:

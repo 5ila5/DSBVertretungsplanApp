@@ -153,6 +153,10 @@ class Login(Screen):
                                 os.remove("Tables/"+file)
                 with open(configPath, "w", encoding="utf-8") as confFile:
                     confFile.write(json.dumps(conf))
+                with open("Tables/lastUpdate.txt", "w", encoding="utf-8") as lUp:
+                    lUp.write("01.01.2000 00:00")
+                with open("Tables/lastUpdateFull.txt", "w", encoding="utf-8") as lUp:
+                    lUp.write("01.01.2000 00:00")
                 threading.Thread(target=DSBgetMethod).start()
                 return True
             else:
@@ -257,8 +261,19 @@ class Table (Screen):
     rowcount = NumericProperty(2)
     colcount = NumericProperty(2)
     data_items = ListProperty()
+    tabName = ""
+
+    def Android_back_click(self, window, key, *largs):
+        if key == 27:
+            if self.tabName[:6] == "Total_":
+                sm.current = "gesTabel"
+            else:
+                sm.current = "lockedArea" # you can create a method here to cache in a list the number of screens and then pop the last visited screen.
+            return True
 
     def __init__(self,tableName="", **kwargs):
+        self.tabName = tableName
+        Window.bind(on_keyboard=self.Android_back_click)
         super(Table, self).__init__(**kwargs)
         self.gridLay.bind(minimum_height=self.gridLay.setter('height'))
         print("GUTEN TAG")
@@ -489,7 +504,10 @@ Window.shape_color_key = 1,1,1,1
 
 
 class DSBApp(App):
+
     def build(self):
+
+
         '''try:
             vibrator.vibrate(10)
         except:
@@ -507,6 +525,19 @@ class DSBApp(App):
 #print("hi")
 if __name__ == "__main__":
     print("hi2")
+    if not os.path.exists("config.json"):
+        conf = {
+            "benutzer": "",
+            "passwort": "",
+            "klassen": ""
+        }
+        with open("config.json", "w")as confFile:
+            confFile.write(json.dumps(conf))
+    if not os.path.exists("Tables/lastUpdate.txt") or not os.path.exists("Tables/lastUpdateFull.txt"):
+        with open("Tables/lastUpdate.txt", "w", encoding="utf-8") as lUp:
+            lUp.write("01.01.2000 00:00")
+        with open("Tables/lastUpdateFull.txt", "w", encoding="utf-8") as lUp:
+            lUp.write("01.01.2000 00:00")
     threading.Thread(target=DSBgetMethod).start()
     DSBApp().run()
 
